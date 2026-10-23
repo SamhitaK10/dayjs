@@ -13,9 +13,10 @@ Day.js is a ~2 KB immutable date library that copies Moment.js's API. The core i
 ## Commands (Node LTS, npm, run from repo root)
 - Install: `npm ci`
 - Lint: `npm run lint` (ESLint 4 + airbnb-base; also runs as a pre-commit hook)
-- One test file: `npx jest test/plugin/weekday.test.js`
-- Full suite, as CI runs it: `npm test`. This re-runs the timezone tests under Pacific/Auckland, Europe/London, America/Whitehorse, Europe/Paris and America/New_York, then runs everything with a **100% line-coverage gate**.
-- Build: `NODE_OPTIONS=--openssl-legacy-provider npm run build`. Without the flag, the `size` step (size-limit 0.18 → webpack 4) fails on modern Node.
+- One test file: `npx jest test/plugin/weekday.test.js`. This is the local "done" check.
+- One file in a specific zone (works on every OS): `npx cross-env TZ=Europe/Paris npx jest test/plugin/timezone.test.js`. Don't use inline `TZ=… npx jest`; on Windows Git Bash it never reaches Node and silently tests local time.
+- Full suite, as CI runs it: `npm test`. This re-runs the timezone tests under Pacific/Auckland, Europe/London, America/Whitehorse, Europe/Paris and America/New_York, then runs everything with a **100% line-coverage gate**. On Windows it stops at cmd's interactive `date` prompt. Outside CI's zones it can fail for reasons unrelated to your change; e.g. 4 timezone-plugin DST tests fail in America/Los_Angeles.
+- Build: `npx cross-env NODE_OPTIONS=--openssl-legacy-provider npm run build`. Without the flag, the `size` step (size-limit 0.18 → webpack 4) fails on modern Node.
 - ESM build: `npm run babel` (run after `build`)
 
 ## Conventions
